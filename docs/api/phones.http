@@ -1,0 +1,49 @@
+### get phones
+http://localhost:3001/phones
+
+### get a single phone document
+http://localhost:3001/phones/id/6413194dba14f06674f22c1f
+
+### get a single phone by slug
+http://localhost:3001/phones/slug/:slug
+
+### phone search
+http://localhost:3001/phones/search
+
+### search with filter
+http://localhost:3001/phones/search?fq=brand:Apple
+
+### search with query & filter
+http://localhost:3001/phones/search?q=android&fq=color:Black,Green|brand:Samsung,Google
+
+### add a new phone
+POST http://localhost:3001/phones
+Content-Type: application/json
+
+{
+    "name": "Apple iPhone 14 Pro 128GB",
+    "slug": "apple-iphone-14-pro-128gb",
+    "brand": "Apple",
+    "os": "iOS",
+    "features": {
+        "color": "Midnight",
+        "screenSize": "5.4",
+        "storage": "128GB",
+        "memory": "4GB",
+        "battery": "4000mah"
+    },
+    "description": "The iPhone 14 is a very good phone for the money, offering improved cameras, a faster A15 Bionic chip and fun Action mode for video capture. But at this price, we’d like to see a telephoto zoom and 120Hz display. Some may want to get the iPhone 14 Plus instead for its larger screen and bigger battery.",
+    "isActive": "y"
+}
+
+### update a phone document
+PATCH http://localhost:3001/phones/6413194dba14f06674f22c1f
+Content-Type: application/json
+
+{
+    "image": "https://m.media-amazon.com/images/W/IMAGERENDERING_521856-T1/images/I/61cwywLZR-L._AC_UY327_FMwebp_QL65_.jpg"
+
+}
+
+### update a phone document
+DELETE http://localhost:3001/phones

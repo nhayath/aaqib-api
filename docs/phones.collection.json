@@ -1,0 +1,27 @@
+{
+    "_id": "ObjectID",
+    "name": "String",
+    "slug": "String",
+    "brand": "String",
+    "image": "String",
+    "os": {
+        "type": "String",
+        "enum": ["Android", "iOS"],
+        "default": "Android"
+    },
+    "features": {
+        "color": "String",
+        "screenSize": "String",
+        "storage": "String",
+        "memory": "String",
+        "battery": "String"
+    },
+    "description": "String",
+    "isActive": {
+        "type": "String",
+        "enum": ["y", "n"],
+        "default": "n"
+    },
+    "createdAt": "Date",
+    "updatedAt": "Date"
+}

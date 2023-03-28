@@ -1,0 +1,9 @@
+- add 10 phones
+- batch add offers
+- add offers for 5 phones
+- phone page
+- offers page
+- phone offers page
+- filter
+- dashboard
+- auth

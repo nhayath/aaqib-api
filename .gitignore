@@ -1,0 +1,9 @@
+.DS_Store
+/node_modules
+/storage
+/test
+.env
+.env.*
+git-clone.sh
+git-push.sh
+.vscode

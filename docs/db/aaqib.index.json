@@ -1,0 +1,55 @@
+{
+    "mappings": {
+        "dynamic": false,
+        "fields": {
+            "brand": [
+                {
+                    "type": "string"
+                },
+                {
+                    "type": "stringFacet"
+                }
+            ],
+            "features": {
+                "fields": {
+                    "color": [
+                        {
+                            "type": "string"
+                        },
+                        {
+                            "type": "stringFacet"
+                        }
+                    ],
+                    "memory": [
+                        {
+                            "type": "string"
+                        },
+                        {
+                            "type": "stringFacet"
+                        }
+                    ],
+                    "storage": [
+                        {
+                            "type": "string"
+                        },
+                        {
+                            "type": "stringFacet"
+                        }
+                    ]
+                },
+                "type": "document"
+            },
+            "name": {
+                "type": "string"
+            },
+            "os": [
+                {
+                    "type": "string"
+                },
+                {
+                    "type": "stringFacet"
+                }
+            ]
+        }
+    }
+}

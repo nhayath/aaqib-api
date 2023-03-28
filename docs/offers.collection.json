@@ -1,0 +1,34 @@
+{
+    "_id": "ObjectID",
+    "phone": {
+        "type": "ObjectID",
+        "required": "true",
+        "ref": "phones"
+    },
+    "network": {
+        "_id": "ObjectID",
+        "required": true,
+        "ref": "networks"
+    },
+    "dealType": {
+        "type": "String",
+        "enum": ["simfree", "contract"],
+        "default": "contract"
+    },
+    "deal": {
+        "cost": "Number",
+        "upfrontCost": "Number",
+        "data": "String",
+        "minutes": "String",
+        "texts": "String",
+        "contractLength": "Number"
+    },
+    "description": "String",
+    "isActive": {
+        "type": "String",
+        "enum": ["y", "n"],
+        "default": "n"
+    },
+    "createdAt": "Date",
+    "updatedAt": "Date"
+}

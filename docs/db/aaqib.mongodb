@@ -1,0 +1,197 @@
+// MongoDB Playground
+use('aaqib');
+
+// find all phones
+db.phones.find({})
+
+// count total
+db.phones.find({}).count()
+
+// find one phone
+db.phones.findOne({_id: ObjectId("6413194dba14f06674f22c1f")})
+
+// search
+db.phones.aggregate([
+    {
+        "$search": {
+            "index": "phoneIdx",
+            "text": {
+                "query": "128gb",
+                "path": {
+                    "wildcard": "*"
+                }
+            }
+        }
+    },
+    {
+        "$project": {
+            _id: 0,
+            name: 1
+        }
+    }
+])
+
+// search compound
+db.phones.aggregate([
+    {
+        "$search": {
+            "index": "phoneIdx",
+            compound: {
+                must: [
+                    {
+                        text: {
+                            query: ["android"],
+                            path: {
+                                wildcard: "*"
+                            }
+                        }
+                    }
+                ],
+                filter: [
+                    {
+                        text: {
+                            query: ["8GB"],
+                            path: "features.memory"
+                        }
+                    }
+                ]
+            }
+        }
+    },
+    {
+        "$project": {
+            _id: 0,
+            name: 1,
+            features: 1
+        }
+    }
+])
+
+// facet test
+db.phones.aggregate([
+    {
+        $searchMeta: {
+            index: "phoneIdx",
+            "facet": {
+                operator: {
+                    compound: {
+                        must: [
+                            {
+                                text: {
+                                    query: ["android"],
+                                    path: {
+                                        wildcard: "*"
+                                    }
+                                }
+                            }
+                        ],
+                        filter: [
+                            {
+                                text: {
+                                    query: ["8GB"],
+                                    path: "features.memory"
+                                }
+                            }
+                        ]
+                    }
+                    
+                },
+                "facets": {
+                    "brandsFacet": {
+                        "type": "string",
+                        "path": "brand"
+                    },
+                    "osFacet": {
+                        "type": "string",
+                        "path": "os"
+                    },
+                    "colorFacet": {
+                        "type": "string",
+                        "path": "features.color"
+                    }
+                }
+            }
+        }
+    }
+])
+
+// search and facet
+db.phones.aggregate([
+    {
+        $search: {
+            index: "phoneIdx",
+            facet: {
+                operator: {
+                    text: {
+                        query: "android",
+                        path: {
+                            wildcard: "*"
+                        }
+                    }
+                },
+                facets: {
+                    brandsFacet: {
+                        type: "string",
+                        "path": "brand"
+                    }
+                }
+            }
+        }
+    },
+    {
+        $facet: {
+            docs: [
+                {$limit: 5},
+                {
+                    $project: {
+                        _id: 0,
+                        name: 1,
+                        features: 1
+                    }
+                }
+            ],
+            meta: [
+                {"$replaceWith": "$$SEARCH_META"},
+                {"$limit": 1}
+            ]
+        }
+    }
+])
+
+// add batch phones
+db.phones.bulkWrite( [
+   { insertOne : { "name": "Google Pixel 7 128GB",
+    "slug": "google-pixel-7-128gb",
+    "brand": "Google",
+    "os": "Android",
+    "features": {
+        "color": "Lime",
+        "screenSize": "6.3",
+        "storage": "128GB",
+        "memory": "8GB",
+        "battery": "4355mAh"
+    },
+    "description": "The Pixel 7 goes even further with built-in smart functions. Send texts and emails with just your voice and simply say 'Answer' to pick up an incoming call or 'Stop' to silence the alarm going off.",
+    "image": "https://fdn2.gsmarena.com/vv/bigpic/google-pixel7-new.jpg",
+    "isActive": "y" } },
+    { insertOne : { "name": "Google Pixel 7a",
+    "slug": "google-pixel-7a",
+    "brand": "Google",
+    "os": "Android",
+    "features": {
+        "color": "Green",
+        "screenSize": "6.1",
+        "storage": "128GB",
+        "memory": "6GB",
+        "battery": "4500mAh"
+    },
+    "description": "The Pixel 7a goes even further with built-in smart functions. Send texts and emails with just your voice and simply say 'Answer' to pick up an incoming call or 'Stop' to silence the alarm going off.",
+    "image": "https://fdn2.gsmarena.com/vv/bigpic/google-pixel-6a.jpg",
+    "isActive": "y" } }
+] )
+
+// get offers
+db.offers.find({'phone._id': ObjectId("641ae8687e86c2e0e24542cc")}).count()
+
+// delet offers
+db.offer.deleteOne({createdAt: {$gte: new Date(2023, 3, 22)}});

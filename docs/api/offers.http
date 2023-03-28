@@ -1,0 +1,61 @@
+http://localhost:3001/offers/phone/apple-iphone-14-128gb
+
+### add a new offer
+POST http://localhost:3001/offers/add
+Content-Type: application/json
+
+{
+    "phone_id": "64132a316300928903cda947",
+    "description": "Three offer",
+    "network": "Three",
+    "dealType": "contract",
+    "deal": {
+        "cost": 36.00,
+        "upfrontCost": 135.00,
+        "data": -1,
+        "minutes": -1,
+        "texts": -1,
+        "contractLength": 24
+    },
+    "store": "Fonehouse",
+    "url": "https://www.fonehouse.co.uk/mobile-phone-deals/iphone-14-5g"
+}
+
+### add bulk offers
+POST http://localhost:3001/offers/addBulk
+Content-Type: application/json
+
+[
+    {
+        "phone_id": "64132a316300928903cda947",
+        "description": "Vodafone offer",
+        "network": "Vodafone",
+        "dealType": "contract",
+        "deal": {
+            "cost": 55.00,
+            "upfrontCost": 25.00,
+            "data": 128,
+            "minutes": -1,
+            "texts": -1,
+            "contractLength": 24
+        },
+        "store": "Vopdafone",
+        "url": "https://www.fonehouse.co.uk/mobile-phone-deals/iphone-14-5g"
+    },
+    {
+        "phone_id": "64132a316300928903cda947",
+        "description": "Three offer",
+        "network": "Three",
+        "dealType": "contract",
+        "deal": {
+            "cost": 45.00,
+            "upfrontCost": 95.00,
+            "data": 128,
+            "minutes": -1,
+            "texts": -1,
+            "contractLength": 24
+        },
+        "store": "Vopdafone",
+        "url": "https://www.fonehouse.co.uk/mobile-phone-deals/iphone-14-5g"
+    }
+]

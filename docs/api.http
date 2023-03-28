@@ -1,0 +1,17 @@
+### default endpoint
+http://localhost:3001
+
+### get phones
+http://localhost:3001/phones
+
+### get a single phone document
+POST http://localhost:3001/phones/:id
+
+### add a new phone
+POST http://localhost:3001/phones
+
+### update a phone document
+PATCH http://localhost:3001/phones/:id
+
+### update a phone document
+DELETE http://localhost:3001/phones
