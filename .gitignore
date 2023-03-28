@@ -7,3 +7,4 @@
 git-clone.sh
 git-push.sh
 .vscode
+.env
