@@ -3,6 +3,21 @@ const Phone = require("../models/phone.model");
 const _ = require("../lib/helper");
 
 module.exports = {
+    async getById(req, res) {
+        try {
+            const id = req.params.id || null;
+            let doc = await Offer.findById(id).lean();
+            if (!doc._id) throw "Invalid Id";
+            let phone = doc.phone;
+
+            doc = _.pickExcept(doc, ["phone", "createdAt", "updatedAt", "__v"]);
+
+            res.json({ doc, phone });
+        } catch (error) {
+            res.json({ error: error.message });
+        }
+    },
+
     async getPhoneOffers(req, res) {
         try {
             let phone = await Phone.findOne({
@@ -17,6 +32,29 @@ module.exports = {
             });
         } catch (err) {
             res.status(400).json({ message: "error" });
+        }
+    },
+
+    async getOffersByPhoneId(req, res) {
+        try {
+            let phone = await Phone.findById(req.params.id).lean();
+
+            let offers = await Offer.find({
+                "phone._id": req.params.id,
+            })
+                .lean()
+                .exec();
+            return res.json({
+                phone: _.pickExcept(phone, ["createdAt", "updatedAt", "__v"]),
+                offers: _.aPickExcept(offers, [
+                    "phone",
+                    "createdAt",
+                    "updatedAt",
+                    "__v",
+                ]),
+            });
+        } catch (err) {
+            res.status(400).json({ message: err.message });
         }
     },
 
@@ -42,6 +80,7 @@ module.exports = {
                 doc,
             });
         } catch (error) {
+            // console.log(error);
             res.status(400).json({ message: error.message });
         }
     },
@@ -99,18 +138,9 @@ module.exports = {
             });
         }
     },
-
-    async getById(req, res) {
-        try {
-            const id = req.params.id || null;
-            if (!id) throw "Invalid Id";
-
-            res.json({ message: `id is${req.params.id}` });
-        } catch (error) {}
-    },
     async test(req, res) {
         try {
-            let phones = await Phone.find({}).exec();
+            let phones = await Phone.find({ dealType: "Contract" }).exec();
             for (let phone of phones) {
                 let image = phone.image;
                 let offers = await Offer.updateMany(

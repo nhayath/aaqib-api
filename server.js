@@ -28,6 +28,8 @@ app.use("/offers", require("./routes/offer.route.js"));
 
 app.use("/users", require("./routes/user.route.js"));
 
+app.use("/options", require("./routes/option.route.js"));
+
 // if the route does not exist
 app.use((req, res, next) => {
     const error = new Error("Page not found");

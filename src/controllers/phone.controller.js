@@ -1,4 +1,5 @@
 const Phone = require("../models/phone.model");
+let Offer = require("../models/offer.model");
 const _ = require("../lib/helper");
 
 module.exports = {
@@ -14,6 +15,73 @@ module.exports = {
         }
     },
 
+    async getAll(req, res) {
+        try {
+            var limit = 100;
+            let page = req.query.page ? parseInt(req.query.page) : 1;
+            var cond = {};
+            // console.log(req.body);
+            if (req.query.brand) {
+                cond["brand"] = req.query.brand;
+            }
+
+            var docs = await Phone.find(cond)
+                .limit(limit)
+                .skip((page - 1) * limit)
+                .exec();
+
+            // total
+            var total = await Phone.find(cond).count().exec();
+            let totalPages = Math.ceil(total / limit);
+
+            res.json({
+                total: total,
+                limit,
+                totalPages,
+                curPage: page,
+                docs: docs,
+            });
+        } catch (err) {
+            // console.log(err);
+            res.status(400).json({
+                message: "No matches found",
+            });
+        }
+    },
+
+    async navSearch(req, res) {
+        try {
+            let q = req.query.q || "";
+            if (q.length === 0) res.json({ docs: [] });
+
+            let docs = await Phone.aggregate([
+                {
+                    $search: {
+                        index: "phoneIdx",
+                        autocomplete: {
+                            query: q,
+                            path: "name",
+                            tokenOrder: "sequential",
+                        },
+                    },
+                },
+                {
+                    $project: {
+                        _id: 0,
+                        slug: 1,
+                        name: 1,
+                    },
+                },
+            ]);
+
+            res.json({ docs });
+        } catch (error) {
+            res.status(400).json({
+                message: error.message,
+            });
+        }
+    },
+
     async search(req, res) {
         try {
             let limit = 6;
@@ -24,6 +92,38 @@ module.exports = {
             let filters = {};
             let total = 0;
             let page = req.query.page || 1;
+
+            let docWithOffers = [];
+
+            for (let doc of docs) {
+                let lowContract = await Offer.find(
+                    {
+                        "phone._id": doc._id,
+                        dealType: "contract",
+                    },
+                    { deal: 1 }
+                )
+                    .sort({ "deal.cost": 1 })
+                    .limit(1)
+                    .exec();
+
+                let lowSimfree = await Offer.find(
+                    {
+                        "phone._id": doc._id,
+                        dealType: "simfree",
+                    },
+                    { deal: 1 }
+                )
+                    .sort({ "deal.cost": 1 })
+                    .limit(1)
+                    .exec();
+
+                doc.deal = {
+                    contract: lowContract[0]?.deal,
+                    simfree: lowSimfree[0]?.deal,
+                };
+                docWithOffers.push(doc);
+            }
 
             if (result.meta && result.meta[0]) {
                 let meta = result.meta[0];
@@ -39,7 +139,7 @@ module.exports = {
                 total,
                 curPage: page,
                 totalPages: totalPages,
-                docs,
+                docs: docWithOffers,
                 filters,
             });
         } catch (err) {
@@ -93,10 +193,15 @@ module.exports = {
     async getById(req, res) {
         try {
             const id = req.params.id || null;
-            if (!id) throw "Invalid Id";
+            let doc = await Phone.findById(id).lean();
+            if (!doc._id) throw "Invalid Id";
 
-            res.json({ message: `id is${req.params.id}` });
-        } catch (error) {}
+            doc = _.pickExcept(doc, ["createdAt", "updatedAt", "__v"]);
+
+            res.json({ doc });
+        } catch (error) {
+            res.json({ error: error.message });
+        }
     },
 };
 

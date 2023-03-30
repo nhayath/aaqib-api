@@ -7,16 +7,20 @@ const pick = (obj, keys = []) => {
     return newObject;
 };
 
-const pickExcept = (obj, ignoreKeys = []) => {
+function pickExcept(obj, ignore) {
     var newObject = {};
-    for (o in obj) {
-        if (ignoreKeys.indexOf(o) < 0) {
-            newObject[o] = obj[o];
+    Object.keys(obj).forEach((key) => {
+        if (!ignore.includes(key)) {
+            newObject[key] = obj[key];
         }
-    }
+    });
 
     return newObject;
-};
+}
+
+function aPickExcept(items, ignore) {
+    return items.map((item) => pickExcept(item, ignore));
+}
 
 // pick from array objects
 const apick = (items, keys = []) => {
@@ -88,4 +92,5 @@ module.exports = {
     searchString,
     sprintf,
     pickExcept,
+    aPickExcept,
 };

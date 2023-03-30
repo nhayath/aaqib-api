@@ -31,6 +31,29 @@ db.phones.aggregate([
     }
 ])
 
+// search autocomplete
+db.phones.aggregate([
+    {
+        "$search": {
+            "index": "phoneIdx",
+            "autocomplete": {
+                "query": "apple",
+                "path": "name",
+                "tokenOrder": "sequential"
+            }
+        }
+    },
+    {
+        $limit: 5
+    },
+    {
+        "$project": {
+            _id: 0,
+            name: 1
+        }
+    }
+])
+
 // search compound
 db.phones.aggregate([
     {
@@ -195,3 +218,8 @@ db.offers.find({'phone._id': ObjectId("641ae8687e86c2e0e24542cc")}).count()
 
 // delet offers
 db.offer.deleteOne({createdAt: {$gte: new Date(2023, 3, 22)}});
+
+// update many offers
+db.offers.updateMany({dealType: 'Contract'}, {
+    $set: {dealType: 'contract'}
+})

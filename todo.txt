@@ -7,3 +7,14 @@
 - filter
 - dashboard
 - auth
+- search front
+- give aaqib accesss to db
+
+
+### Dashboard
+- [x] add phone
+- [x] add featured deals
+- [x] top phones
+- [] users 
+- [] search
+- [x] offers sort by contract and simfree

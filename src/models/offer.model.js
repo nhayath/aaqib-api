@@ -32,6 +32,7 @@ const offerSchema = Schema(
             minutes: Number,
             texts: Number,
             contractLength: Number,
+            deliveryCost: Number,
         },
         store: String,
         url: String,

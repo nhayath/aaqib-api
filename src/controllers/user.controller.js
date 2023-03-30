@@ -15,7 +15,7 @@ const genToken = function (obj) {
 module.exports = {
     get(req, res) {
         User.find({})
-            .select("name email")
+            .select("name email role")
             .exec()
             .then((result) => {
                 res.status(200).json({
@@ -28,6 +28,25 @@ module.exports = {
                     message: "Query to Users DB failed",
                 });
             });
+    },
+
+    async findOne(req, res) {
+        try {
+            let id = req.params.id || null;
+            let email = req.params.email || null;
+            if (!id && !email) throw "ID or email is required";
+            let cond = {};
+            if (id) {
+                cond["_id"] = id;
+            } else if (email) {
+                cond["email"] = email;
+            }
+
+            let user = await User.findOne(cond).lean();
+            res.json({ user });
+        } catch (error) {
+            res.status(400).json({ message: error.message });
+        }
     },
 
     create(req, res) {
