@@ -1,0 +1,57 @@
+{
+    "mappings": {
+        "dynamic": false,
+        "fields": {
+            "network": [
+                {
+                    "type": "string"
+                },
+                {
+                    "type": "stringFacet"
+                }
+            ],
+            "dealType": [
+                {
+                    "type": "string"
+                },
+                {
+                    "type": "stringFacet"
+                }
+            ],
+            "phone": {
+                "fields": {
+                    "brand": [
+                        {
+                            "type": "string"
+                        },
+                        {
+                            "type": "stringFacet"
+                        }
+                    ]
+                },
+                "type": "document"
+            },
+            "deal": {
+                "fields": {
+                    "cost": [
+                        {
+                            "type": "number"
+                        },
+                        {
+                            "type": "numberFacet"
+                        }
+                    ],
+                    "contractLength": [
+                        {
+                            "type": "number"
+                        },
+                        {
+                            "type": "numberFacet"
+                        }
+                    ]
+                },
+                "type": "document"
+            }
+        }
+    }
+}

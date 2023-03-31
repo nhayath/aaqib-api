@@ -217,9 +217,54 @@ db.phones.bulkWrite( [
 db.offers.find({'phone._id': ObjectId("641ae8687e86c2e0e24542cc")}).count()
 
 // delet offers
-db.offer.deleteOne({createdAt: {$gte: new Date(2023, 3, 22)}});
+db.offers.deleteOne({createdAt: {$gte: new Date(2023, 3, 22)}});
 
 // update many offers
 db.offers.updateMany({dealType: 'Contract'}, {
     $set: {dealType: 'contract'}
 })
+
+// aggregate offers
+db.offers.aggregate([
+    {
+        $searchMeta: {
+            index: "offersIdx",
+            facet: {
+                operator: {
+                    compound: {
+                        must: [
+                            {
+                                text: {
+                                    query: ["contract"],
+                                    path: "dealType",
+                                }
+                            }
+                        ]
+                    }
+                },
+                facets: {
+                    brandsFacet: {
+                        type: "string",
+                        path: "phone.brand",
+                    },
+                    networkFacet: {
+                        type: "string",
+                        path: "network",
+                    },
+                    contractLength: {
+                        type: "number",
+                        boundaries: [1, 12, 24, 36],
+                        path: "deal.contractLength",
+                        default: "Other",
+                    },
+                    costFacet: {
+                        type: "number",
+                        boundaries: [20, 30, 40, 50, 60, 70],
+                        path: "deal.cost",
+                        default: "Other",
+                    }
+                }
+            }
+        }
+    }
+])

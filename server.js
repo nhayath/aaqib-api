@@ -22,13 +22,20 @@ app.get("/", (req, res) => {
 });
 
 //routes
+// phones route
 app.use("/phones", require("./routes/phone.route.js"));
 
+// offers routes
 app.use("/offers", require("./routes/offer.route.js"));
 
+// users routes
 app.use("/users", require("./routes/user.route.js"));
 
+// options routes
 app.use("/options", require("./routes/option.route.js"));
+
+// options routes
+app.use("/test", require("./routes/test.route.js"));
 
 // if the route does not exist
 app.use((req, res, next) => {
