@@ -18,3 +18,4 @@
 - [] users 
 - [] search
 - [x] offers sort by contract and simfree
+- [] offers
