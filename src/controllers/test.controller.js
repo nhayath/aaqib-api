@@ -31,7 +31,7 @@ module.exports = {
                                     type: "string",
                                     path: "network",
                                 },
-                                contractLength: {
+                                contractLengthFacet: {
                                     type: "number",
                                     boundaries: [1, 12, 24, 36],
                                     path: "deal.contractLength",

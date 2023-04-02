@@ -12,10 +12,25 @@
 
 
 ### Dashboard
-- [x] add phone
-- [x] add featured deals
-- [x] top phones
-- [] users 
-- [] search
-- [x] offers sort by contract and simfree
-- [] offers
+- [x] dashboard/offers/contract
+    - files modified
+        - offer.controller.js
+        - offer.model.js
+        - /dashboard/offers/contract.jsx
+        - /dashboard/offers/simonly.jsx
+        - /dashboard/offers/add-new.jsx
+        - /compoents/OfferFilter.jsx
+        - /compoents/ContractOffers.jsx
+        - /compoents/OfferAddForm.jsx
+        - /compoents/DashSidebar.jsx
+        - /compoents/DashboardLayout.jsx
+    - [x] offers edit for all type
+    - [x] sort by recent offers
+    = [x] `contract.jsx` delete button
+
+### front
+
+- [] Contract offers
+    - pages/contract.jsx
+    - offer.controller.js
+    - offer.route.js

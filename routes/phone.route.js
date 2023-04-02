@@ -24,3 +24,6 @@ router.get("/search", PhoneController.search);
 
 // update a phone
 router.patch("/:id", adminAuth, PhoneController.update);
+
+// delete a phone
+router.delete("/delete/:id", adminAuth, PhoneController.deletePhone);

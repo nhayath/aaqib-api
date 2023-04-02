@@ -1,5 +1,3 @@
-const { stringify } = require("querystring");
-
 const mongoose = require("mongoose"),
     Schema = mongoose.Schema;
 
@@ -22,7 +20,7 @@ const offerSchema = Schema(
         network: String,
         dealType: {
             type: String,
-            enum: ["simfree", "contract"],
+            enum: ["simfree", "contract", "simonly"],
             default: "contract",
         },
         deal: {
@@ -50,14 +48,15 @@ const offerSchema = Schema(
 );
 
 // indexes
+offerSchema.index({ "phone._id": 1 }, { name: "phoneIdx", background: true });
 offerSchema.index(
-    { "phone._id": 1, sku: 1 },
-    { name: "phoneIdx", background: true }
-);
-offerSchema.index(
-    { "phone.slug": 1, sku: 1 },
+    { "phone.slug": 1 },
     { name: "phoneSlugIdx", background: true }
 );
 
+offerSchema.index(
+    { dealType: 1, network: 1 },
+    { name: "dealTypeNetworkIdx", background: true }
+);
 // export
 module.exports = mongoose.model("Offer", offerSchema);

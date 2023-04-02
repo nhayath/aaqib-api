@@ -224,47 +224,23 @@ db.offers.updateMany({dealType: 'Contract'}, {
     $set: {dealType: 'contract'}
 })
 
-// aggregate offers
+// offers aggreate db
+db.offers.aggregate([
+
+]);
+
+// aggregate offers atlas
 db.offers.aggregate([
     {
-        $searchMeta: {
-            index: "offersIdx",
-            facet: {
-                operator: {
-                    compound: {
-                        must: [
-                            {
-                                text: {
-                                    query: ["contract"],
-                                    path: "dealType",
-                                }
-                            }
-                        ]
-                    }
-                },
-                facets: {
-                    brandsFacet: {
-                        type: "string",
-                        path: "phone.brand",
-                    },
-                    networkFacet: {
-                        type: "string",
-                        path: "network",
-                    },
-                    contractLength: {
-                        type: "number",
-                        boundaries: [1, 12, 24, 36],
-                        path: "deal.contractLength",
-                        default: "Other",
-                    },
-                    costFacet: {
-                        type: "number",
-                        boundaries: [20, 30, 40, 50, 60, 70],
-                        path: "deal.cost",
-                        default: "Other",
-                    }
-                }
-            }
-        }
+        $group: {_id: "$dealType", total: {$sum: 1}}
     }
 ])
+
+// get options
+db.options.find({name: 'top-contract-phone-deals'})
+
+// get phone by id
+db.phones.find({}, {_id: 0, name: 1, price: 1, slug: 1}).limit(5).skip(10)
+
+// find offers associated with a phone
+db.offers.find({"phone.slug": "xiaomi-poco-x5-pro", network: "Vodafone"})

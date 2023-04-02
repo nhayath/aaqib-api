@@ -19,7 +19,7 @@ module.exports = {
             const name = req.params.name || null;
             if (!name) throw "Invalid Id";
 
-            var limit = 100;
+            var limit = 12;
             let page = req.query.page ? parseInt(req.query.page) : 1;
             var cond = {};
             // console.log(req.body);

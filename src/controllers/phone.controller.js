@@ -28,6 +28,7 @@ module.exports = {
             var docs = await Phone.find(cond)
                 .limit(limit)
                 .skip((page - 1) * limit)
+                .sort({ createdAt: -1 })
                 .exec();
 
             // total
@@ -203,6 +204,23 @@ module.exports = {
             res.json({ error: error.message });
         }
     },
+
+    async deletePhone(req, res) {
+        try {
+            const id = req.params.id || null;
+            if (!id) throw new Error("Invalid Id");
+
+            let status = await Phone.deleteOne({ _id: id }).exec();
+
+            res.status(200).json({
+                message: "OK",
+                status,
+            });
+        } catch (error) {
+            console.log(error);
+            res.status(400).json({ error: 1, message: error.message });
+        }
+    },
 };
 
 async function search(req) {
@@ -317,7 +335,7 @@ function formatFilter(fq) {
         fl.push(f);
     }
 
-    console.log(fl);
+    // console.log(fl);
 
     return fl;
 }
